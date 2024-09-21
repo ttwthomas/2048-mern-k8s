@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>High Scores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #scores-table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        #scores-table th, #scores-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        #scores-table th {
+            background-color: #f2f2f2;
+        }
+
+        #error-message {
+            color: red;
+            text-align: center;
+        }
+
+        #loading {
+            text-align: center;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top High Scores</h1>
+
+    <div id="loading">Loading high scores...</div>
+    <div id="error-message"></div>
+
+    <table id="scores-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Player Name</th>
+                <th>Score</th>
+                <th>Date Achieved</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- High scores will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // URL of the backend API endpoint
+        const API_URL = 'api/scores';
+
+        // Function to fetch high scores from the API
+        async function fetchHighScores() {
+            try {
+                const response = await fetch(API_URL);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const scores = await response.json();
+                displayHighScores(scores);
+            } catch (error) {
+                displayError(`Failed to load high scores: ${error.message}`);
+                console.error('Error fetching high scores:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // Function to display high scores in the table
+        function displayHighScores(scores) {
+            const table = document.getElementById('scores-table');
+            const tbody = table.querySelector('tbody');
+
+            // Clear any existing rows
+            tbody.innerHTML = '';
+
+            if (scores.length === 0) {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.colSpan = 4;
+                cell.textContent = 'No high scores available.';
+                row.appendChild(cell);
+                tbody.appendChild(row);
+            } else {
+                scores.forEach((score, index) => {
+                    const row = document.createElement('tr');
+
+                    const rankCell = document.createElement('td');
+                    rankCell.textContent = index + 1;
+                    row.appendChild(rankCell);
+
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = score.name;
+                    row.appendChild(nameCell);
+
+                    const scoreCell = document.createElement('td');
+                    scoreCell.textContent = score.score;
+                    row.appendChild(scoreCell);
+
+                    const dateCell = document.createElement('td');
+                    const date = new Date(score.date);
+                    dateCell.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    row.appendChild(dateCell);
+
+                    tbody.appendChild(row);
+                });
+            }
+
+            table.style.display = 'table';
+        }
+
+        // Function to display error messages
+        function displayError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+        }
+
+        // Fetch high scores when the page loads
+        window.addEventListener('DOMContentLoaded', fetchHighScores);
+    </script>
+</body>
+</html>
+

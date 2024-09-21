@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>2048</title>
+
+  <link href="style/main.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="meta/apple-touch-icon.png">
+  <link rel="apple-touch-startup-image" href="meta/apple-touch-startup-image-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone 5+ -->
+  <link rel="apple-touch-startup-image" href="meta/apple-touch-startup-image-640x920.png"  media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)"> <!-- iPhone, retina -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div class="container">
+    <div class="heading">
+      <h1 class="title">2048</h1>
+      <div class="scores-container">
+        <div class="score-container">0</div>
+        <div class="best-container">0</div>
+      </div>
+    </div>
+
+    <div class="above-game">
+      <p class="game-intro">Combine les nombres et atteins <strong>2048!</strong></p>
+      <a class="restart-button">Nouvelle partie</a>
+    </div>
+
+    <div class="game-container">
+      <div class="game-message">
+        <p></p>
+        <div class="lower">
+	        <a class="keep-playing-button">Continuer</a>
+          <a class="retry-button">Essaies encore</a>
+        </div>
+      </div>
+
+      <div class="grid-container">
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+        <div class="grid-row">
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+          <div class="grid-cell"></div>
+        </div>
+      </div>
+
+      <div class="tile-container">
+
+      </div>
+    </div>
+    <h2>Meilleurs Scores</h1>
+
+    <div id="loading">chargement des scores...</div>
+    <div id="error-message"></div>
+
+    <table id="scores-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>Rang</th>
+                <th>Nom</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- High scores will be inserted here dynamically -->
+        </tbody>
+    </table>
+    <hr>
+    <p class="game-explanation">
+      <strong class="important">Comment jouer :</strong> Utilisez vos  <strong>flèches</strong> pour déplacer les tuiles. Lorsque deux tuiles avec le même nombre se touchent, elles  <strong>fusionnent en une seule !</strong>
+    </p>
+      
+    <hr>
+    <p>
+    Créé par <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a> basé sur <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> et <a href="http://asherv.com/threes/" target="_blank">Threes de Asher Vollmer.</a>
+    </p>
+    <p>Modifié par cocadmin ;)</p>
+  </div>
+
+  <script src="js/bind_polyfill.js"></script>
+  <script src="js/classlist_polyfill.js"></script>
+  <script src="js/animframe_polyfill.js"></script>
+  <script src="js/keyboard_input_manager.js"></script>
+  <script src="js/html_actuator.js"></script>
+  <script src="js/grid.js"></script>
+  <script src="js/tile.js"></script>
+  <script src="js/local_storage_manager.js"></script>
+  <script src="js/game_manager.js"></script>
+  <script src="js/application.js"></script>
+  <script>
+    // URL of the backend API endpoint
+    const API_URL = 'api/scores';
+
+    // Function to fetch high scores from the API
+    async function fetchHighScores() {
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const scores = await response.json();
+            displayHighScores(scores);
+        } catch (error) {
+            displayError(`Failed to load high scores: ${error.message}`);
+            console.error('Error fetching high scores:', error);
+        } finally {
+            document.getElementById('loading').style.display = 'none';
+        }
+    }
+
+    // Function to display high scores in the table
+    function displayHighScores(scores) {
+        const table = document.getElementById('scores-table');
+        const tbody = table.querySelector('tbody');
+
+        // Clear any existing rows
+        tbody.innerHTML = '';
+
+        if (scores.length === 0) {
+            const row = document.createElement('tr');
+            const cell = document.createElement('td');
+            cell.colSpan = 4;
+            cell.textContent = 'No high scores available.';
+            row.appendChild(cell);
+            tbody.appendChild(row);
+        } else {
+            scores.forEach((score, index) => {
+                const row = document.createElement('tr');
+
+                const rankCell = document.createElement('td');
+                rankCell.textContent = index + 1;
+                row.appendChild(rankCell);
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = score.name;
+                row.appendChild(nameCell);
+
+                const scoreCell = document.createElement('td');
+                scoreCell.textContent = score.score;
+                row.appendChild(scoreCell);
+
+                const dateCell = document.createElement('td');
+                const date = new Date(score.date);
+                dateCell.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                row.appendChild(dateCell);
+
+                tbody.appendChild(row);
+            });
+        }
+
+        table.style.display = 'table';
+    }
+
+    // Function to display error messages
+    function displayError(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+    }
+
+    // Fetch high scores when the page loads
+    window.addEventListener('DOMContentLoaded', fetchHighScores);
+</script>
+</body>
+</html>

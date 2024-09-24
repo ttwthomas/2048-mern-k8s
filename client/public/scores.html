@@ -79,7 +79,7 @@
                 const scores = await response.json();
                 displayHighScores(scores);
             } catch (error) {
-                displayError(`Failed to load high scores: ${error.message}`);
+                displayError(`Erreure lors du chargement des scores: ${error.message}`);
                 console.error('Error fetching high scores:', error);
             } finally {
                 document.getElementById('loading').style.display = 'none';

@@ -27,20 +27,20 @@ function LocalStorageManager() {
 }
 
 function submitScore(name, score) {
-  fetch('api/scores', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, score }),
-  })
-  .then(response => response.json())
-  .then(data => {
-      console.log('Score submitted:', data);
-  })
-  .catch((error) => {
-      console.error('Error submitting score:', error);
-  });
+    fetch('api/scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, score }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Score submitted:', data);
+    })
+    .catch((error) => {
+        console.error('Error submitting score:', error);
+    });
 }
 
 LocalStorageManager.prototype.localStorageSupported = function () {

@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>2048</title>
+  <title>2048 yoo</title>
 
   <link href="style/main.css" rel="stylesheet" type="text/css">
   <link rel="shortcut icon" href="favicon.ico">
@@ -36,7 +36,7 @@
         <p></p>
         <div class="lower">
 	        <a class="keep-playing-button">Continuer</a>
-          <a class="retry-button">Essaies encore</a>
+          <a class="retry-button">Essaie encore</a>
         </div>
       </div>
 
@@ -71,12 +71,12 @@
 
       </div>
     </div>
-    <h2>Meilleurs Scores</h1>
+    <h2>Meilleurs Scores</h2>
 
     <div id="loading">chargement des scores...</div>
     <div id="error-message"></div>
 
-    <table id="scores-table" style="display: none;">
+    <table id="scores-table" style="display: none; border-spacing: 20px 10px;">
         <thead>
             <tr>
                 <th>Rang</th>
@@ -93,7 +93,6 @@
     <p class="game-explanation">
       <strong class="important">Comment jouer :</strong> Utilisez vos  <strong>flèches</strong> pour déplacer les tuiles. Lorsque deux tuiles avec le même nombre se touchent, elles  <strong>fusionnent en une seule !</strong>
     </p>
-      
     <hr>
     <p>
     Créé par <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli.</a> basé sur <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> et <a href="http://asherv.com/threes/" target="_blank">Threes de Asher Vollmer.</a>
@@ -146,7 +145,7 @@
             const row = document.createElement('tr');
             const cell = document.createElement('td');
             cell.colSpan = 4;
-            cell.textContent = 'No high scores available.';
+            cell.textContent = 'Pas de scores enregistés';
             row.appendChild(cell);
             tbody.appendChild(row);
         } else {

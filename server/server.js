@@ -14,10 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGO_URI )
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
@@ -26,16 +23,11 @@ const scoresRouter = require('./routes/scores');
 app.use('/api/scores', scoresRouter);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '..', 'client', 'public')));
-
-// Serve game static file
-app.get('/game', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'game.html'));
-});
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
 // Serve high scores page
 app.get('/scores', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'public', 'scores.html'));
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'scores.html'));
 });
 
 // The "catchall" handler: for any request that doesn't match above, send React's index.html

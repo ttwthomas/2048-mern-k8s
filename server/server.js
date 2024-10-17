@@ -4,14 +4,21 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const path = require('path');
+const promBundle = require("express-prom-bundle");
 
 dotenv.config();
 
 const app = express();
+const metricsMiddleware = promBundle({
+    buckets: [0.1, 0.2, 0.5, 1, 10,],
+    includeMethod: true, 
+    includePath: true,
+});
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use("/((?!style|js|favicon\.ico))*",metricsMiddleware);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI )

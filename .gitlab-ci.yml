@@ -27,4 +27,7 @@ docker-build:
 deploy-to-k8:
   stage: deploy
   script: 
-  - echo ok
+  - echo "$KUBECONFIG_DATA" > .kubeconfig
+  - export KUBECONFIG=".kubeconfig"
+  - kubectl get pods
+  - kubectl apply -f app-2048.yml

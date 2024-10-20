@@ -3,6 +3,7 @@ FROM ubuntu:latest
 # Copy the project files to the container
 COPY . /home/ubuntu/2048-mern
 
+WORKDIR /home/ubuntu/2048-mern
 RUN cp -r client/public client/build
 
 # Set the working directory to the server folder

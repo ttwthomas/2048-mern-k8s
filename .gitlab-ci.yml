@@ -32,5 +32,6 @@ deploy-to-k8:
   script: 
   - echo "$KUBECONFIG_DATA" > .kubeconfig
   - export KUBECONFIG=".kubeconfig"
+  - cat .kubeconfig
   - kubectl get pods
   - kubectl apply -f app-2048.yml

@@ -26,7 +26,9 @@ docker-build:
 
 deploy-to-k8:
   stage: deploy
-  image: bitnami/kubectl
+  image: 
+    name: bitnami/kubectl
+    entrypoint: [""]
   script: 
   - echo "$KUBECONFIG_DATA" > .kubeconfig
   - export KUBECONFIG=".kubeconfig"

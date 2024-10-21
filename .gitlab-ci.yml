@@ -33,5 +33,9 @@ deploy-to-k8:
   - cat "$KUBECONFIG_DATA" > .kubeconfig
   - export KUBECONFIG=".kubeconfig"
   - cat .kubeconfig
+  - pwd
+  - echo $KUBECONFIG
+  - kubectl version
+  - kubectl config view --raw=true
   - kubectl get pods --insecure-skip-tls-verify
   - kubectl apply -f app-2048.yml --insecure-skip-tls-verify

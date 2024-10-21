@@ -30,7 +30,7 @@ deploy-to-k8:
     name: bitnami/kubectl
     entrypoint: [""]
   script: 
-  - echo "$KUBECONFIG_DATA" > .kubeconfig
+  - cat "$KUBECONFIG_DATA" > .kubeconfig
   - export KUBECONFIG=".kubeconfig"
   - cat .kubeconfig
   - kubectl get pods

@@ -15,9 +15,6 @@ spec:
       containers:
       - name: mon-app
         image: cocadmin/2048-mern
-        env:
-        - name: MONGO_URI
-          value: mongodb://username:password@mongo-service.default.svc.cluster.local:27017/
         ports:
         - containerPort: 5000
 
@@ -31,7 +28,7 @@ spec:
   selector:
     app: jeu-2048
   ports:
-  - port: 80
+  - port: 5000
     targetPort: 5000
     nodePort: 30080
 

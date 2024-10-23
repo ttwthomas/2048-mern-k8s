@@ -15,6 +15,7 @@ spec:
       containers:
       - name: mon-app
         image: cocadmin/2048-mern
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
 

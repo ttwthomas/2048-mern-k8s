@@ -6,14 +6,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mon-app
+      app: jeu-2048
   template:
     metadata:
       labels:
-        app: mon-app
+        app: jeu-2048
     spec:
       containers:
-      - name: mon-app
+      - name: jeu-2048
         image: cocadmin/2048-mern
         imagePullPolicy: Always
         ports:

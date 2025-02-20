@@ -37,5 +37,10 @@ docker build -t image_name:image_tag .
 npm run start
 ```
 
+## Déployer l'app sur un cluster Kubernetes
+```
+kubectl apply -f app-2048.yml
+```
+
 L'application se lance sur le (port 5000)[](localhost:5000/index.html)
 L'api est disponible sur (/api/scores)[localhost:5000/api/scores]

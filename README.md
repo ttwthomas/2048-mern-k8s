@@ -5,7 +5,7 @@ L'API utilise le framework express.js
 # Installation
 ## Télecharger les sources de l'application
 ```
-git clone https://github.com/ttwthomas/2048-mern.git
+git clone https://github.com/ttwthomas/2048-mern-k8s.git
 ```
 
 ## Installer NPM
@@ -24,6 +24,13 @@ npm run build
 ```cd server
 npm install
 ```
+
+## Builder une image Docker
+```
+cd ..
+docker build -t image_name:image_tag .
+```
+
 
 ## Lancer l'application:
 ```

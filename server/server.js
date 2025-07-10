@@ -21,9 +21,18 @@ app.use(express.json());
 app.use("/((?!style|js|favicon\.ico))*",metricsMiddleware);
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI )
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.log(err));
+function connectDB() {
+    mongoose.connect(process.env.MONGO_URI, {
+        connectTimeoutMS: 5000, // 5s max time to establish a connection
+    })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => {
+        console.error('MongoDB connection failed:', err.message);
+        console.log('Retrying in 10 seconds...');
+        setTimeout(connectDB, 10000); // Retry after 10 seconds
+    });
+}
+connectDB();
 
 // Routes
 const scoresRouter = require('./routes/scores');

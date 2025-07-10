@@ -22,6 +22,7 @@ app.use("/((?!style|js|favicon\.ico))*",metricsMiddleware);
 
 // Connect to MongoDB
 function connectDB() {
+    console.error('Connecting to ', process.env.MONGO_URI);
     mongoose.connect(process.env.MONGO_URI, {
         connectTimeoutMS: 5000, // 5s max time to establish a connection
     })
